@@ -1,0 +1,1477 @@
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://live.zwidgets.com/js-sdk/1.2/ZohoEmbededAppSDK.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="./script.js"></script>
+  <!-- Incluir CSS de Select2 -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+
+  <!-- Incluir JS de Select2 -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+  <title>Formulario de Registro</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f7fc;
+      padding-top: 50px;
+    }
+
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      width: 95%;
+      max-width: 800px;
+      text-align: left;
+      /* Alineación del texto a la izquierda */
+    }
+
+    .form-row {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      /* Alineación de elementos al inicio */
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 35%;
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    select,
+    input {
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    select:focus,
+    input:focus {
+      border-color: #2196f3;
+      outline: none;
+      box-shadow: 0 0 8px rgba(33, 150, 243, 0.3);
+    }
+
+
+
+    h2 {
+      color: #333;
+      font-weight: 600;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .form-label {
+      font-size: 1.1rem;
+      color: #555;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .form-control {
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 1rem;
+      background-color: #f7f9fc;
+      border: 1px solid #ddd;
+      color: #555;
+    }
+
+    .form-control:focus {
+      border-color: #4e73df;
+      box-shadow: 0 0 5px rgba(78, 115, 223, 0.5);
+      background-color: #fff;
+    }
+
+    .btn-primary {
+      background-color: #0071CE;
+      border-color: #0071CE;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-size: 1.1rem;
+      width: 100%;
+      color: white;
+      font-weight: 600;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+
+    .mb-3 {
+      margin-bottom: 1.5rem;
+    }
+
+    .row {
+      margin-bottom: 20px;
+    }
+
+    select.form-control {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      padding-right: 30px;
+      background: url('https://img.icons8.com/ios-filled/50/000000/chevron-down.png') no-repeat right center;
+      background-size: 1rem;
+    }
+
+    select.form-control:focus {
+      background-color: #fff;
+    }
+
+    .form-control[readonly] {
+      background-color: #f1f1f1;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 768px) {
+      .col-md-6 {
+        width: 100% !important;
+      }
+
+      .container {
+        padding: 20px;
+      }
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      max-width: fit-content;
+      background-color: #f9f9f9;
+      font-family: Arial, sans-serif;
+    }
+
+    .checkbox-container input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: #007BFF;
+      /* cambia el color del checkbox si el navegador lo soporta */
+    }
+
+    .checkbox-container span {
+      font-size: 16px;
+      color: #333;
+    }
+
+    #checkbox_rural {
+      display: none;
+      /* oculto por defecto */
+      margin-top: 10px;
+    }
+  </style>
+
+
+</head>
+
+<body>
+  <div class="container">
+    <form id="registroForm">
+      <div class="row">
+        <!-- Sección: Tipo de persona e identificación -->
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Tipo de persona *</label>
+          <select class="form-control" name="tipo_persona">
+            <option value="">Seleccione</option>
+            <option value="Persona natural (N)">Persona natural</option>
+            <option value="Persona jurídica (A)">Persona jurídica</option>
+          </select>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Tipo de identificación *</label>
+          <select class="form-control" name="tipo_identificacion">
+            <option value="">Seleccione</option>
+            <option value="C (C)">C (C)</option>
+            <option value="C (E)">C (E)</option>
+            <option value="NI (N)">NI (N)</option>
+            <option value="PA (P)">PA (P)</option>
+            <option value="TI (T)">TI (T)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Sección: Número de identificación y Nombre -->
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Número de identificación *</label>
+          <input type="text" class="form-control" name="numero_identificacion">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Nombre *</label>
+          <input type="text" class="form-control" name="nombre">
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Sección: Apellidos y Municipio de Expedición -->
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Apellidos *</label>
+          <input type="text" class="form-control" name="apellidos">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Municipio de Expedición</label>
+          <select class="form-control" name="municipio_expedicion" id="municipio_expedicion">
+            <option value="">Seleccione</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Sección: Fecha de nacimiento y Correo electrónico -->
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Fecha de nacimiento</label>
+          <input type="date" class="form-control" name="fecha_nacimiento">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Correo electrónico *</label>
+          <input type="email" class="form-control" name="correo">
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Sección: Estado Civil y Teléfonos -->
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Estado civil</label>
+          <select class="form-control" name="estado_civil">
+            <option value="">Seleccione</option>
+            <option value="Soltero Sin U.Marital Vigente (01)">Soltero Sin U.Marital Vigente</option>
+            <option value="Soltero Con U.Marital Vigente (02)">Soltero Con U.Marital Vigente</option>
+            <option value="Casado con Soc.Cony.Vigente (03)">Casado con Soc.Cony.Vigente</option>
+            <option value="Casado con Soc.Dis.y Liq. (04)">Casado con Soc.Dis.y Liq.</option>
+            <option value="Divorciado Med.Sent.Juzgado (05)">Divorciado Med.Sent.Juzgado</option>
+            <option value="Viudo (06)">Viudo</option>
+            <option value="No tiene - persona juridica (07)">No tiene - persona juridica</option>
+          </select>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Teléfono *</label>
+          <input type="tel" class="form-control" name="telefono">
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Sección: Móvil y Domicilio -->
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Móvil</label>
+          <input type="tel" class="form-control" name="movil">
+        </div>
+        <div class="row">
+          <div>
+            <label class="form-label">Municipio de residencia</label>
+            <select class="form-control" name="municipio_residencia" id="municipio_residencia">
+              <option value="">Seleccione</option>
+            </select>
+          </div>
+        </div>
+        <div id="checkbox_rural">
+          <label class="checkbox-container">
+            <span>¿Es una dirección rural?</span>
+            <input id="ruralCheck" type="checkbox" name="direccion_rural" value="sí">
+          </label>
+        </div>
+        <!-- Aca estan los campos para la dirección rural -->
+        <div id="div_rural" class="form-row">
+          <div class="form-group">
+            <label for="">Complemento rural 1</label>
+            <select name="complemento_rural_1" id="complemento_rural_1">
+              <option value="">---Seleccionar---</option>
+              <option value="AD">Administración</option>
+              <option value="AGN">Agrupación</option>
+              <option value="AL">Altillo</option>
+              <option value="APTDO">Apartado</option>
+              <option value="APTO">Apartamento</option>
+              <option value="APTDO">Apartado</option>
+              <option value="BR">Barrio</option>
+              <option value="BL">Bloque</option>
+              <option value="BG">Bodega</option>
+              <option value="CN">Camino</option>
+              <option value="CT">Carretera</option>
+              <option value="CA">Casa</option>
+              <option value="CAS">Caserío</option>
+              <option value="CEL">Célula</option>
+              <option value="CE">Centro</option>
+              <option value="CIR">Circular</option>
+              <option value="CDM">Condominio</option>
+              <option value="CONJ">Conjunto</option>
+              <option value="CS">Consultorio</option>
+              <option value="CO">Corregimiento</option>
+              <option value="DP">Depósito</option>
+              <option value="ED">Edificio</option>
+              <option value="EN">Entrada</option>
+              <option value="ESQ">Esquina</option>
+              <option value="ET">Etapa</option>
+              <option value="FCA">Finca</option>
+              <option value="GJ">Garaje</option>
+              <option value="GR">Grada</option>
+              <option value="INF">Inferior</option>
+              <option value="IN">Interior</option>
+              <option value="KM">Kilómetro</option>
+              <option value="LC">Local</option>
+              <option value="LT">Lote</option>
+              <option value="MZ">Manzana</option>
+              <option value="MZTA">Manzanita</option>
+              <option value="MJ">Mejora</option>
+              <option value="MN">Mezzanine</option>
+              <option value="MD">Módulo</option>
+              <option value="MUN">Municipio</option>
+              <option value="NCO">Núcleo</option>
+              <option value="OF">Oficina</option>
+              <option value="PA">Parcela</option>
+              <option value="PCN">Parcelación</option>
+              <option value="PSJ">Pasaje</option>
+              <option value="PH">Penthouse</option>
+              <option value="PI">Piso</option>
+              <option value="PT">Portería</option>
+              <option value="PD">Predio</option>
+              <option value="PPAL">Principal</option>
+              <option value="PN">Puente</option>
+              <option value="QDA">Quebrada</option>
+              <option value="SA">Salón</option>
+              <option value="SEC">Sector</option>
+              <option value="SS">Semisótano</option>
+              <option value="SU">Suite</option>
+              <option value="SMZ">Supermanzana</option>
+              <option value="TZ">Terraza</option>
+              <option value="TO">Torre</option>
+              <option value="TRL">Troncal</option>
+              <option value="UN">Unidad</option>
+              <option value="URB">Urbanización</option>
+              <option value="VDA">Vereda</option>
+              <option value="VIA">Vía</option>
+              <option value="ZN">Zona</option>
+            </select>
+
+          </div>
+          <div class="form-group">
+            <label for="numero_placa">Texto 1</label>
+            <input type="text" name="texto_rula_1" id="texto_rula_1">
+          </div>
+          <div class="form-group">
+            <label for="">Complemento rural 2</label>
+            <select name="complemento_rural_2" id="complemento_rural_2">
+              <option value="">---Seleccionar---</option>
+              <option value="AD">Administración</option>
+              <option value="AGN">Agrupación</option>
+              <option value="AL">Altillo</option>
+              <option value="APTDO">Apartado</option>
+              <option value="APTO">Apartamento</option>
+              <option value="APTDO">Apartado</option>
+              <option value="BR">Barrio</option>
+              <option value="BL">Bloque</option>
+              <option value="BG">Bodega</option>
+              <option value="CN">Camino</option>
+              <option value="CT">Carretera</option>
+              <option value="CA">Casa</option>
+              <option value="CAS">Caserío</option>
+              <option value="CEL">Célula</option>
+              <option value="CE">Centro</option>
+              <option value="CIR">Circular</option>
+              <option value="CDM">Condominio</option>
+              <option value="CONJ">Conjunto</option>
+              <option value="CS">Consultorio</option>
+              <option value="CO">Corregimiento</option>
+              <option value="DP">Depósito</option>
+              <option value="ED">Edificio</option>
+              <option value="EN">Entrada</option>
+              <option value="ESQ">Esquina</option>
+              <option value="ET">Etapa</option>
+              <option value="FCA">Finca</option>
+              <option value="GJ">Garaje</option>
+              <option value="GR">Grada</option>
+              <option value="INF">Inferior</option>
+              <option value="IN">Interior</option>
+              <option value="KM">Kilómetro</option>
+              <option value="LC">Local</option>
+              <option value="LT">Lote</option>
+              <option value="MZ">Manzana</option>
+              <option value="MZTA">Manzanita</option>
+              <option value="MJ">Mejora</option>
+              <option value="MN">Mezzanine</option>
+              <option value="MD">Módulo</option>
+              <option value="MUN">Municipio</option>
+              <option value="NCO">Núcleo</option>
+              <option value="OF">Oficina</option>
+              <option value="PA">Parcela</option>
+              <option value="PCN">Parcelación</option>
+              <option value="PSJ">Pasaje</option>
+              <option value="PH">Penthouse</option>
+              <option value="PI">Piso</option>
+              <option value="PT">Portería</option>
+              <option value="PD">Predio</option>
+              <option value="PPAL">Principal</option>
+              <option value="PN">Puente</option>
+              <option value="QDA">Quebrada</option>
+              <option value="SA">Salón</option>
+              <option value="SEC">Sector</option>
+              <option value="SS">Semisótano</option>
+              <option value="SU">Suite</option>
+              <option value="SMZ">Supermanzana</option>
+              <option value="TZ">Terraza</option>
+              <option value="TO">Torre</option>
+              <option value="TRL">Troncal</option>
+              <option value="UN">Unidad</option>
+              <option value="URB">Urbanización</option>
+              <option value="VDA">Vereda</option>
+              <option value="VIA">Vía</option>
+              <option value="ZN">Zona</option>
+            </select>
+
+          </div>
+          <div class="form-group">
+            <label for="numero_placa">Texto 2</label>
+            <input type="text" name="texto_rula_2" id="texto_rula_2">
+          </div>
+          <div class="form-group">
+            <label for="numero_placa">Complemento</label>
+            <input type="text" name="complemento_3_rual" id="complemento_3_rual">
+          </div>
+
+        </div>
+
+
+
+
+
+
+
+
+        <div id="set_direccion" class="form-row">
+          <div class="form-group">
+            <label for="via">Vía</label>
+            <select name="via" id="via">
+              <option value="">---Seleccionar---</option>
+              <option value="AU">Autopista</option>
+              <option value="AV">Avenida</option>
+              <option value="AC">Avenida Calle</option>
+              <option value="AK">Avenida Carrera</option>
+              <option value="BL">Bulevar</option>
+              <option value="CL">Calle</option>
+              <option value="CLJ">Callejón</option>
+              <option value="KR">Carrera</option>
+              <option value="CT">Carretera</option>
+              <option value="CQ">Circular</option>
+              <option value="CV">Circunvalar</option>
+              <option value="CC">Cuentas Corridas</option>
+              <option value="DG">Diagonal</option>
+              <option value="PJ">Pasaje</option>
+              <option value="PS">Paseo</option>
+              <option value="PT">Peatonal</option>
+              <option value="TV">Transversal</option>
+              <option value="TC">Troncal</option>
+              <option value="VT">Variante</option>
+              <option value="VI">Vía</option>
+            </select>
+
+          </div>
+          <div class="form-group">
+            <label for="numero_via">Número</label>
+            <input type="text" name="numero_via" id="numero_via" placeholder="Ej: 29">
+          </div>
+          <div class="form-group">
+            <label for="numero_letra">Letra</label>
+            <select name="" id="letra_numero">
+              <option value="">---Seleccionar---</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+              <option value="D">D</option>
+              <option value="E">E</option>
+              <option value="F">F</option>
+              <option value="G">G</option>
+              <option value="H">H</option>
+              <option value="I">I</option>
+              <option value="J">J</option>
+              <option value="K">K</option>
+              <option value="L">L</option>
+              <option value="M">M</option>
+              <option value="N">N</option>
+              <option value="O">O</option>
+              <option value="P">P</option>
+              <option value="Q">Q</option>
+              <option value="R">R</option>
+              <option value="S">S</option>
+              <option value="T">T</option>
+              <option value="U">U</option>
+              <option value="V">V</option>
+              <option value="W">W</option>
+              <option value="X">X</option>
+              <option value="Y">Y</option>
+              <option value="Z">Z</option>
+            </select>
+
+          </div>
+          <div class="form-group">
+            <label for="BIS">BIS</label>
+            <select name="bis" id="bis">
+              <option value="">---Seleccionar---</option>
+              <option value="BIS">BIS</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="complemeneto bis">Complemento</label>
+            <select name="" id="complemento_bis">
+              <option value="">---Seleccionar---</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+              <option value="D">D</option>
+              <option value="E">E</option>
+              <option value="F">F</option>
+              <option value="G">G</option>
+              <option value="H">H</option>
+              <option value="I">I</option>
+              <option value="J">J</option>
+              <option value="K">K</option>
+              <option value="L">L</option>
+              <option value="M">M</option>
+              <option value="N">N</option>
+              <option value="O">O</option>
+              <option value="P">P</option>
+              <option value="Q">Q</option>
+              <option value="R">R</option>
+              <option value="S">S</option>
+              <option value="T">T</option>
+              <option value="U">U</option>
+              <option value="V">V</option>
+              <option value="W">W</option>
+              <option value="X">X</option>
+              <option value="Y">Y</option>
+              <option value="Z">Z</option>
+            </select>
+
+          </div>
+          <div class="form-group">
+            <label for="cuadrante">Cuadrante</label>
+            <select name="cuadrante" id="cuadrante">
+              <option value="">---Seleccionar---</option>
+              <option value="Este">ESTE</option>
+              <option value="Norte">NORTE</option>
+              <option value="Oeste">OESTE</option>
+              <option value="Sur">SUR</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label style="text-align: center;" for="">#</label>
+          </div>
+          <div class="form-group">
+            <label for="numero_placa1">Número de placa</label>
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <input type="text" name="numero_placa" id="numero_placa" maxlength="3" placeholder="123"
+                style="width: 55px; text-align: center;" />
+
+              <select name="" id="numero_placa2" style="width: 80px;">
+                <option value="">Letra</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+                <option value="F">F</option>
+                <option value="G">G</option>
+                <option value="H">H</option>
+                <option value="I">I</option>
+                <option value="J">J</option>
+                <option value="K">K</option>
+                <option value="L">L</option>
+                <option value="M">M</option>
+                <option value="N">N</option>
+                <option value="O">O</option>
+                <option value="P">P</option>
+                <option value="Q">Q</option>
+                <option value="R">R</option>
+                <option value="S">S</option>
+                <option value="T">T</option>
+                <option value="U">U</option>
+                <option value="V">V</option>
+                <option value="W">W</option>
+                <option value="X">X</option>
+                <option value="Y">Y</option>
+                <option value="Z">Z</option>
+              </select>
+
+              <select name="bis_2" id="bis_2" style="width: 89px;">
+                <option value="">Opción</option>
+                <option value="BIS">BIS</option>
+              </select>
+
+              <input type="text" name="numero_placa3" id="numero_placa3" maxlength="3" placeholder="245"
+                style="width: 60px; text-align: center;" />
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label for="cuadrante2">Cuadrante</label>
+            <select name="cuadrante2" id="cuadrante2">
+              <option value="">---Seleccionar---</option>
+              <option value="Este">ESTE</option>
+              <option value="Norte">NORTE</option>
+              <option value="Oeste">OESTE</option>
+              <option value="Sur">SUR</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="">Complemento 1</label>
+            <select name="complemento1" id="complemento1">
+              <option value="">---Seleccionar---</option>
+              <option value="AD">Administración</option>
+              <option value="AGN">Agrupación</option>
+              <option value="AL">Altillo</option>
+              <option value="APTDO">Apartado</option>
+              <option value="APTO">Apartamento</option>
+              <option value="APTDO">Apartado</option>
+              <option value="BR">Barrio</option>
+              <option value="BL">Bloque</option>
+              <option value="BG">Bodega</option>
+              <option value="CN">Camino</option>
+              <option value="CT">Carretera</option>
+              <option value="CA">Casa</option>
+              <option value="CAS">Caserío</option>
+              <option value="CEL">Célula</option>
+              <option value="CE">Centro</option>
+              <option value="CIR">Circular</option>
+              <option value="CDM">Condominio</option>
+              <option value="CONJ">Conjunto</option>
+              <option value="CS">Consultorio</option>
+              <option value="CO">Corregimiento</option>
+              <option value="DP">Depósito</option>
+              <option value="ED">Edificio</option>
+              <option value="EN">Entrada</option>
+              <option value="ESQ">Esquina</option>
+              <option value="ET">Etapa</option>
+              <option value="FCA">Finca</option>
+              <option value="GJ">Garaje</option>
+              <option value="GR">Grada</option>
+              <option value="INF">Inferior</option>
+              <option value="IN">Interior</option>
+              <option value="KM">Kilómetro</option>
+              <option value="LC">Local</option>
+              <option value="LT">Lote</option>
+              <option value="MZ">Manzana</option>
+              <option value="MZTA">Manzanita</option>
+              <option value="MJ">Mejora</option>
+              <option value="MN">Mezzanine</option>
+              <option value="MD">Módulo</option>
+              <option value="MUN">Municipio</option>
+              <option value="NCO">Núcleo</option>
+              <option value="OF">Oficina</option>
+              <option value="PA">Parcela</option>
+              <option value="PCN">Parcelación</option>
+              <option value="PSJ">Pasaje</option>
+              <option value="PH">Penthouse</option>
+              <option value="PI">Piso</option>
+              <option value="PT">Portería</option>
+              <option value="PD">Predio</option>
+              <option value="PPAL">Principal</option>
+              <option value="PN">Puente</option>
+              <option value="QDA">Quebrada</option>
+              <option value="SA">Salón</option>
+              <option value="SEC">Sector</option>
+              <option value="SS">Semisótano</option>
+              <option value="SU">Suite</option>
+              <option value="SMZ">Supermanzana</option>
+              <option value="TZ">Terraza</option>
+              <option value="TO">Torre</option>
+              <option value="TRL">Troncal</option>
+              <option value="UN">Unidad</option>
+              <option value="URB">Urbanización</option>
+              <option value="VDA">Vereda</option>
+              <option value="VIA">Vía</option>
+              <option value="ZN">Zona</option>
+            </select>
+
+          </div>
+          <div class="form-group">
+            <label for="numero_placa">Complemento 2</label>
+            <input type="text" name="complemento_2" id="complemento_2">
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Domicilio para correspondencia</label>
+          <input disabled id="domi_input" type="text" class="form-control" name="domicilio">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Barrio</label>
+          <input type="text" class="form-control" name="barrio">
+        </div>
+      </div>
+
+
+
+      <div class="row">
+        <!-- Sección: Clasificación Tributaria y Tipo Contribuyente -->
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Clasificación Tributaria</label>
+          <select class="form-control" name="clasificacion_tributaria">
+            <option value="">Seleccione</option>
+            <option value="Agente Ret. IVa Autorret .R.C. (D)">Agente Ret. IVa Autorret .R.C.</option>
+            <option value="Arriendos Pn RC No Agente Rete (K)">Arriendos Pn RC No Agente Rete</option>
+            <option value="Autorete no responsa de IVA (5)">Autorete no responsa de IVA</option>
+            <option value="Consorcio Reg Común (R)">Consorcio Reg Común</option>
+            <option value="Contribuyente PANAMA (I)">Contribuyente PANAMA</option>
+            <option value="Cosorcio no Resp. Impto Ventas (F)">Cosorcio no Resp. Impto Ventas</option>
+            <option value="Empresa del Exterior (Y)">Empresa del Exterior</option>
+            <option value="Entidades Gubernamentales (B)">Entidades Gubernamentales</option>
+            <option value="Gran C. Autorret Reg Común (G)">Gran C. Autorret Reg Común</option>
+            <option value="Gran C. Autorret RegComún F.E (6)">Gran C. Autorret RegComún F.E</option>
+            <option value="Gran C. Autorret NO Resp IVA (Z)">Gran C. Autorret NO Resp IVA</option>
+            <option value="Gran C. NO Autorret Reg Común (H)">Gran C. NO Autorret Reg Común</option>
+            <option value="Gran C.NO Autorret NO Resp IVA (M)">Gran C.NO Autorret NO Resp IVA</option>
+            <option value="NO Contribuyente PANAMA (J)">NO Contribuyente PANAMA</option>
+            <option value="NO Responsable de IVA (V)">NO Responsable de IVA</option>
+            <option value="Pequeña empresa No resp IVA (U)">Pequeña empresa No resp IVA</option>
+            <option value="Pequeña empresa Reg Común (Q)">Pequeña empresa Reg Común</option>
+            <option value="Pequeña Empresa Reg. Simplific (W)">Pequeña Empresa Reg. Simplific</option>
+            <option value="Persona Natural (P)">Persona Natural</option>
+            <option value="Proceso Asignacion Retenciones (3)">Proceso Asignacion Retenciones</option>
+            <option value="RC NOAut-Agente RETEICA Bga (4)">RC NOAut-Agente RETEICA Bga</option>
+            <option value="Reg Comun NO Aut Persona Natur (2)">Reg Comun NO Aut Persona Natur</option>
+            <option value="Reg. Esp Reg Comun GC no Autor (E)">Reg. Esp Reg Comun GC no Autor</option>
+            <option value="Régim Espec R.Com Auto ARI (O)">Régim Espec R.Com Auto ARI</option>
+            <option value="Régimen Común Autorretenedor (A)">Régimen Común Autorretenedor</option>
+            <option value="Régimen Común NOAutorretenedor (C)">Régimen Común NOAutorretenedor</option>
+            <option value="Régimen Especial NO Resp IVA (T)">Régimen Especial NO Resp IVA</option>
+            <option value="Régimen Especial Rég Común (X)">Régimen Especial Rég Común</option>
+            <option value="Régimen Responsable de IVA (8)">Régimen Responsable de IVA</option>
+            <option value="Régimen Simple de Tributación (7)">Régimen Simple de Tributación</option>
+            <option value="Régimen Simplificado (S)">Régimen Simplificado</option>
+            <option value="Servicios Públicos Domiciliari (L)">Servicios Públicos Domiciliari</option>
+            <option value="ZonaFranca RComun NO Autorrete (1)">ZonaFranca RComun NO Autorrete </option>
+          </select>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Tipo contribuyente</label>
+          <select class="form-control" name="tipo_contribuyente">
+            <option value="">Seleccione</option>
+            <option value="ZonaFranca RComun NO Autorrete (1)">ZonaFranca RComun NO Autorrete</option>
+            <option value="Reg Comun NO Aut Persona Natur (2)">Reg Comun NO Aut Persona Natur</option>
+            <option value="Proceso Asignacion Retenciones (3)">Proceso Asignacion Retenciones</option>
+            <option value="RC NOAut-Agente RETEICA Bga (4)">RC NOAut-Agente RETEICA Bga</option>
+            <option value="Autorete no responsa de IVA (5)">Autorete no responsa de IVA</option>
+            <option value="Gran C. Autorret RegComún F.E (6)">Gran C. Autorret RegComún F.E</option>
+            <option value="Régimen Simple de Tributación (7)">Régimen Simple de Tributación</option>
+            <option value="Régimen Responsable de IVA (8)">Régimen Responsable de IVA</option>
+            <option value="Régimen Común Autorretenedor (A)">Régimen Común Autorretenedor</option>
+            <option value="Entidades Gubernamentales (B)">Entidades Gubernamentales</option>
+            <option value="Régimen Común NOAutorretenedor (C)">Régimen Común NOAutorretenedor</option>
+            <option value="Agente Ret. IVa Autorret .R.C. (D)">Agente Ret. IVa Autorret .R.C.</option>
+            <option value="Reg. Esp Reg Comun GC no Autor (E)">Reg. Esp Reg Comun GC no Autor</option>
+            <option value="Cosorcio no Resp. Impto Ventas (F)">Cosorcio no Resp. Impto Ventas</option>
+            <option value="Gran C. Autorret Reg Común (G)">Gran C. Autorret Reg Común</option>
+            <option value="Gran C. NO Autorret Reg Común (H)">Gran C. NO Autorret Reg Común</option>
+            <option value="Contribuyente PANAMA (I)">Contribuyente PANAMA</option>
+            <option value="NO Contribuyente PANAMA (J)">NO Contribuyente PANAMA</option>
+            <option value="Arriendos Pn RC No Agente Rete (K)">Arriendos Pn RC No Agente Rete</option>
+            <option value="Servicios Públicos Domiciliari (L)">Servicios Públicos Domiciliari</option>
+            <option value="Gran C.NO Autorret NO Resp IVA (M)">Gran C.NO Autorret NO Resp IVA</option>
+            <option value="Régim Espec R.Com Auto ARI (O)">Régim Espec R.Com Auto ARI</option>
+            <option value="Persona Natural (P)">Persona Natural</option>
+            <option value="Pequeña empresa Reg Común (Q)">Pequeña empresa Reg Común</option>
+            <option value="Consorcio Reg Común (R)">Consorcio Reg Común</option>
+            <option value="Régimen Simplificado (S)">Régimen Simplificado</option>
+            <option value="Régimen Especial NO Resp IVA (T)">Régimen Especial NO Resp IVA</option>
+            <option value="Pequeña empresa No resp IVA (U)">Pequeña empresa No resp IVA</option>
+            <option value="NO Responsable de IVA (V)">NO Responsable de IVA</option>
+            <option value="Pequeña Empresa Reg. Simplific (W)">Pequeña Empresa Reg. Simplific</option>
+            <option value="Régimen Especial Rég Común (X)">Régimen Especial Rég Común</option>
+            <option value="Empresa del Exterior (Y)">Empresa del Exterior</option>
+            <option value="Gran C. Autorret NO Resp IVA (Z)">Gran C. Autorret NO Resp IVA</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Sección: Proyecto HC y Hoja de negociación -->
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Proyecto HC</label>
+          <input type="text" class="form-control" name="proyecto_hc">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Hoja de negociación</label>
+          <input type="text" class="form-control" name="hoja_negociacion">
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-save"></i> Guardar
+      </button>
+    </form>
+  </div>
+
+  <script>
+    let nomenclatura;
+    let letra_1 = document.getElementById("letra_numero");
+    let direccion = document.getElementById("descripcion");
+    let domi_input = document.getElementById("domi_input");
+    let via = document.getElementById("via");
+    let numero = document.getElementById("numero_via");
+    let numero_placa = document.getElementById("numero_placa");
+    let numero_placa2 = document.getElementById("numero_placa2");
+    let numero_placa3 = document.getElementById("numero_placa3");
+    let cuadrante = document.getElementById("cuadrante");
+    let complemento_1 = document.getElementById("complemento1");
+    let complemento_2 = document.getElementById("complemento_2");
+    let bis = document.getElementById("bis");
+    let complemento_bis = document.getElementById("complemento_bis");
+    let cuadrante2 = document.getElementById("cuadrante2");
+    let bis_2 = document.getElementById("bis_2");
+    let ruralCheck = document.getElementById("ruralCheck");
+    let checkbox_rural = document.getElementById("checkbox_rural");
+    let set_direccion = document.getElementById("set_direccion");
+    let div_rural = document.getElementById("div_rural");
+    div_rural.style.display = "none";
+    let complemento_rural_1 = document.getElementById("complemento_rural_1");
+    let texto_rula_1 = document.getElementById("texto_rula_1");
+    let complemento_rural_2 = document.getElementById("complemento_rural_2");
+    let texto_rula_2 = document.getElementById("texto_rula_2");
+    let complemento_3_rual = document.getElementById("complemento_3_rual");
+
+
+
+
+    function actualizarDireccion() {
+      let valorVia = via.value.trim();
+      let valorNumero = numero.value.toUpperCase().trim();
+      let valor_letra_1 = letra_1.value.trim();
+      let numero_placa_valor = numero_placa.value.trim();
+      let numero_placa_valor_2 = numero_placa2.value.trim();
+      let numero_placa_valor_3 = numero_placa3.value.trim();
+      let cuadrante_valor = cuadrante.value.trim().toUpperCase();
+      let complemento_1_valor = complemento_1.value.trim();
+      let complemento_2_valor = complemento_2.value.trim();
+      let bis_valor = bis.value.trim();
+      let complemento_bis_valor = complemento_bis.value.trim();
+      let cuadrante2_valor = cuadrante2.value.trim().toUpperCase();
+      let bis_2_valor = bis_2.value.trim().toUpperCase();
+      let complemento_rural_1_valor = complemento_rural_1.value.trim();
+      let texto1Rural = texto_rula_1.value.trim();
+      let complemento_rural_2_valor = complemento_rural_2.value.trim();
+      let texto_rula_2_valor = texto_rula_2.value.trim();
+      let complemento_3_rual_valor = complemento_3_rual.value.trim();
+
+      // Crear un array con los valores y eliminar los vacíos
+      let partesDireccion = [
+        valorVia,
+        valorNumero,
+        valor_letra_1,
+        bis_valor,
+        complemento_bis_valor,
+        cuadrante_valor,
+        numero_placa_valor,
+        numero_placa_valor_2.toUpperCase(),
+        bis_2_valor,
+        numero_placa_valor_3,
+        cuadrante2_valor,
+        complemento_1_valor.toUpperCase(),
+        complemento_2_valor.toUpperCase(),
+        complemento_rural_1_valor.toUpperCase(),
+        texto1Rural.toUpperCase(),
+        complemento_rural_2_valor.toUpperCase(),
+        texto_rula_2_valor.toUpperCase(),
+        complemento_3_rual_valor.toUpperCase(),
+
+      ].filter(Boolean); // Elimina valores vacíos
+
+      // Unir la dirección con espacios limpios
+      nomenclatura = partesDireccion.join(" ");
+
+      // Asignar la dirección al input
+      if (nomenclatura.trim() !== "") {
+        domi_input.value = nomenclatura;
+      }
+
+
+      if (valorNumero.length === 0) return; // Si está vacío, no se valida
+
+      if (!validarNumero(valorNumero)) {
+        Swal.fire({
+          title: "Error de formato",
+          text: "El campo 'Número' debe cumplir estas reglas:\n\n" +
+            "- Si comienza con un número (distinto de 0): debe tener 1, 2 o 3 caracteres. Puede ser solo números o hasta 2 números seguidos de una letra (Ej: 8, 22, 22C). No puede empezar con 0 ni con combinaciones como 1C, 08, 888C.\n" +
+            "- Si comienza con una letra: hasta 20 caracteres alfanuméricos, permitiendo letras, números y espacios (Ej: SUBA 08, BOYACA 9A).",
+          icon: "warning"
+        });
+        numero.value = "";
+        return;
+      }
+    }
+
+    function validarNumero(valor) {
+      // Si comienza con letra:
+      if (/^[A-ZÁÉÍÓÚÑ]/.test(valor)) {
+        return /^[A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ0-9 ]{0,19}$/.test(valor);
+      }
+      // Si comienza con número (no 0):
+      if (/^[1-9]/.test(valor)) {
+        return /^[1-9][0-9]{0,2}[A-Z]?$/.test(valor) && !/^[1-9][A-Z]$/.test(valor) && !/^[0]/.test(valor) && !/^[1-9][0-9]{3}[A-Z]?$/.test(valor);
+      }
+      return false; // No coincide con ninguna regla
+    }
+    document.getElementById("numero_placa2").addEventListener("input", function (event) {
+      this.value = this.value.replace(/[^A-Za-z]/g, ''); // Elimina cualquier carácter que no sea una letra
+    });
+    function validarNumero(valor) {
+      // Si comienza con letra:
+      if (/^[A-ZÁÉÍÓÚÑ]/.test(valor)) {
+        return /^[A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ0-9 ]{0,19}$/.test(valor);
+      }
+      // Si comienza con número (no 0):
+      if (/^[1-9]/.test(valor)) {
+        return /^[1-9][0-9]{0,2}[A-Z]?$/.test(valor) && !/^[1-9][A-Z]$/.test(valor) && !/^[0]/.test(valor) && !/^[1-9][0-9]{2}[A-Z]{1}$/.test(valor);
+      }
+      return false; // No coincide con ninguna regla
+    }
+    // 🔹 Eventos para actualizar en tiempo real la descripción
+    via.addEventListener("change", actualizarDireccion);
+    numero.addEventListener("input", actualizarDireccion);
+    numero_placa.addEventListener("input", actualizarDireccion);
+    numero_placa2.addEventListener("input", actualizarDireccion);
+    numero_placa3.addEventListener("input", actualizarDireccion);
+    cuadrante.addEventListener("change", actualizarDireccion);
+    complemento_1.addEventListener("change", actualizarDireccion);
+    complemento_2.addEventListener("input", actualizarDireccion);
+    letra_1.addEventListener("change", actualizarDireccion);
+    bis.addEventListener("change", actualizarDireccion);
+    complemento_bis.addEventListener("change", actualizarDireccion);
+    cuadrante2.addEventListener("change", actualizarDireccion);
+    bis_2.addEventListener("change", actualizarDireccion);
+    complemento_rural_1.addEventListener("change", actualizarDireccion);
+    texto_rula_1.addEventListener("input", actualizarDireccion);
+    complemento_rural_2.addEventListener("change", actualizarDireccion);
+    texto_rula_2.addEventListener("input", actualizarDireccion);
+    complemento_3_rual.addEventListener("input", actualizarDireccion);
+
+
+    ZOHO.embeddedApp.on("PageLoad", function (data) {
+      console.log("Zoho Widget Loaded", data);
+
+      ZOHO.CRM.CONFIG.getCurrentUser()
+        .then(function (data) {
+          console.log("Usuario actual ZOHO:", data);
+
+          if (data && data['users'] && data['users'].length > 0) {
+
+            let perfil = data['users'][0]['profile']['name'];
+            let email = data['users'][0]['email'];
+            console.log("Perfil del usuario actual:", perfil);
+            console.log("Correo del usuario:", email);
+
+            if (
+              perfil === "Administrator" ||
+              email === "lkgarcia@marval.com.co" ||
+              email === "kcapacho@marval.com.co" ||
+              email === "alrojas@marval.com.co" ||
+              email === "jruizm@marval.com.co" ||
+              email === "dlizarazo@marval.com.co"
+            ) {
+              console.log("El usuario es permitido para crear un contacto.");
+
+              let allRecords = [];  // Aquí se guardarán todos los registros
+              let page = 1;         // Página inicial
+
+              // Función para obtener los registros
+              function getAllMunicipios(page) {
+                ZOHO.CRM.API.getAllRecords({
+                  Entity: "Municipios",   // El módulo de Zoho CRM del cual obtener los registros
+                  sort_order: "asc",       // Orden ascendente
+                  per_page: 200,           // Número de registros por página
+                  page: page               // Página que deseas obtener
+                })
+                  .then(function (data) {
+                    if (data.data && data.data.length > 0) {
+                      allRecords = allRecords.concat(data.data);  // Agrega los registros obtenidos al array allRecords
+
+                      // Verifica si hay más registros
+                      if (data.info.more_records) {
+                        getAllMunicipios(page + 1);  // Si hay más registros, solicita la siguiente página
+                      } else {
+                        console.log("Todos los municipios han sido cargados.");
+                        console.log('Cantidad de registros:', allRecords.length);
+                        populateMunicipios();  // Llamamos a la función que agrega los municipios al select
+                      }
+                    } else {
+                      console.log("No hay más registros.");
+                    }
+                  });
+              }
+
+              function populateMunicipios() {
+                let selectResidencia = document.getElementById("municipio_residencia");
+                let selectExpedicion = document.getElementById("municipio_expedicion");
+
+                // Limpiar las opciones previas
+                selectResidencia.innerHTML = '<option value="">Seleccione</option>';
+                selectExpedicion.innerHTML = '<option value="">Seleccione</option>';
+
+                // Agregar los municipios como opciones en ambos selects
+                allRecords.forEach(function (municipio) {
+                  let optionResidencia = document.createElement("option");
+                  optionResidencia.value = municipio.id;
+                  optionResidencia.textContent = municipio.Name;
+                  selectResidencia.appendChild(optionResidencia);
+
+                  let optionExpedicion = document.createElement("option");
+                  optionExpedicion.value = municipio.id;
+                  optionExpedicion.textContent = municipio.Name;
+                  selectExpedicion.appendChild(optionExpedicion);
+                });
+
+                // Inicializar Select2 en ambos selects
+                $('#municipio_residencia').select2({
+                  placeholder: "Seleccione un municipio",
+                  allowClear: true
+                });
+
+                $('#municipio_expedicion').select2({
+                  placeholder: "Seleccione un municipio",
+                  allowClear: true
+                });
+
+                // Evento change para el municipio de residencia
+                $('#municipio_residencia').on('change', function () {
+                  let valor_municipio = $(this).find('option:selected').text();
+                  console.log("Municipio de residencia seleccionado:", valor_municipio);
+
+                  let seccion = document.getElementById("set_direccion");
+
+                  // Mostrar alerta si se selecciona un municipio específico
+                  if (valor_municipio.endsWith(" / COLOMBIA")) {
+
+                    checkbox_rural.style.display = "block";
+
+                    ruralCheck.addEventListener("change", () => {
+                      if (ruralCheck.checked) {
+                        console.log("Checkbox marcado. Valor:", ruralCheck.value);
+                        div_rural.style.display = "block";
+                        div_rural.style.backgroundColor = "#f0f4f8"; // Azul muy claro, casi grisáceo
+                        div_rural.style.borderRadius = "10px";
+                        div_rural.style.padding = "20px";
+                        div_rural.style.border = "1px solid #90a4ae"; // Gris azulado sobrio
+                        div_rural.style.boxShadow = "0 2px 6px rgba(0, 0, 0, 0.1)";
+                        div_rural.style.transition = "all 0.3s ease";
+                        div_rural.style.fontWeight = "500";
+                        div_rural.style.fontSize = "15px";
+                        div_rural.style.color = "#37474f"; // Gris oscuro azulado para el texto
+                        div_rural.style.fontFamily = "Segoe UI, Roboto, sans-serif";
+
+
+                        seccion.style.display = "none";
+                      } else {
+                        console.log("Checkbox desmarcado.");
+                        seccion.style.display = "";
+                        div_rural.style.display = "none";
+                      }
+                    })
+
+
+
+                    via.disabled = false;
+                    bis_2.disabled = false;
+                    numero.disabled = false;
+                    numero_placa.disabled = false;
+                    numero_placa2.disabled = false;
+                    numero_placa3.disabled = false;
+                    cuadrante.disabled = false;
+                    complemento_1.disabled = false;
+                    complemento_2.disabled = false;
+                    letra_1.disabled = false;
+                    bis.disabled = false;
+                    complemento_bis.disabled = false;
+                    cuadrante2.disabled = false;
+                    domi_input.disabled = true;
+                    seccion.style.display = ""; // Mostrar la sección (si estaba oculta)
+
+                    seccion.style.backgroundColor = "#f0f4f8"; // Azul muy claro, casi grisáceo
+                    seccion.style.borderRadius = "10px";
+                    seccion.style.padding = "20px";
+                    seccion.style.border = "1px solid #90a4ae"; // Gris azulado sobrio
+                    seccion.style.boxShadow = "0 2px 6px rgba(0, 0, 0, 0.1)";
+                    seccion.style.transition = "all 0.3s ease";
+                    seccion.style.fontWeight = "500";
+                    seccion.style.fontSize = "15px";
+                    seccion.style.color = "#37474f"; // Gris oscuro azulado para el texto
+                    seccion.style.fontFamily = "Segoe UI, Roboto, sans-serif";
+
+
+
+
+                  } else {
+                    checkbox_rural.style.display = "";
+
+                    via.disabled = true;
+                    numero.disabled = true;
+                    numero_placa.disabled = true;
+                    numero_placa2.disabled = true;
+                    numero_placa3.disabled = true;
+                    cuadrante.disabled = true;
+                    complemento_1.disabled = true;
+                    complemento_2.disabled = true;
+                    letra_1.disabled = true;
+                    bis.disabled = true;
+                    complemento_bis.disabled = true;
+                    cuadrante2.disabled = true;
+                    bis_2.disabled = true;
+                    seccion.style.display = "none";
+                    domi_input.disabled = false;
+
+
+                  }
+                });
+
+                // Evento change para el municipio de expedición
+                $('#municipio_expedicion').on('change', function () {
+                  let valor_municipio = $(this).find('option:selected').text();
+                  console.log("Municipio de expedición seleccionado:", valor_municipio);
+                });
+              }
+
+
+              // Llamada inicial para obtener los registros de la primera página
+              getAllMunicipios(page);
+
+
+
+
+              document.getElementById("registroForm").addEventListener("submit", function (event) {
+                event.preventDefault();
+
+                const formData = new FormData(event.target);
+                const data = {};
+
+                formData.forEach((value, key) => {
+                  data[key] = value;
+                });
+
+                console.log("Datos del formulario:", data);
+
+
+
+
+                // Validación de la fecha de nacimiento
+                const fechaNacimiento = new Date(data.fecha_nacimiento);
+                const fechaActual = new Date();
+                const edadMinima = 18;
+
+                // Calculamos la diferencia entre la fecha actual y la fecha de nacimiento
+                const diferenciaAnios = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
+                const mesActual = fechaActual.getMonth();
+                const mesNacimiento = fechaNacimiento.getMonth();
+                const diaActual = fechaActual.getDate();
+                const diaNacimiento = fechaNacimiento.getDate();
+
+                // Si la persona tiene menos de 18 años
+                if (diferenciaAnios < edadMinima || (diferenciaAnios === edadMinima && (mesNacimiento > mesActual || (mesNacimiento === mesActual && diaNacimiento > diaActual)))) {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'La fecha debe ser mayor a 18 años para poder realizar el registro.'
+                  });
+                  return; // Detiene el envío del formulario
+                }
+
+                // Validación de fecha futura
+                if (fechaNacimiento > fechaActual) {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'La fecha de nacimiento no puede ser futura.'
+                  });
+                  return; // Detiene el envío del formulario
+                }
+
+                var recordData = {
+                  "First_Name": data.nombre,
+                  "Last_Name": data.apellidos,
+                  "Tipo_de_identificaci_n": data.tipo_identificacion,
+                  "N_mero_de_identificaci_n": data.numero_identificacion,
+                  "Tipo_de_persona": data.tipo_persona,
+                  "Email": data.correo,
+                  "Phone": data.telefono,
+                  "Municipio_de_Expepedici_n": data.municipio_expedicion,
+                  "Date_of_Birth": data.fecha_nacimiento,
+                  "Mobile": data.movil,
+                  "Barrio": data.barrio,
+                  "Municipio": data.municipio_residencia,
+                  "Cl_sificaci_n_Tributaria": data.clasificacion_tributaria,
+                  "Tipo_contribuyente": data.tipo_contribuyente,
+                  "HC_Proyecto": data.proyecto_hc,
+                  "Hoja_de_negociaci_n": data.hoja_negociacion,
+                  "bandera_creaci_n_contacto_JDE": true,
+                  "Mailing_Street": nomenclatura && nomenclatura.trim() !== "" ? nomenclatura : domi_input.value,
+                  "Estado_Civil": data.estado_civil
+                };
+
+
+                if (data.tipo_persona === "Persona natural (N)" && data.municipio_expedicion === "") {
+                  Swal.fire({
+                    title: "Advertencia",
+                    text: "El campo Municipio de expedición es obligatorio.",
+                    icon: "question"
+                  });
+                  return;
+                } else if (data.tipo_persona === "Persona natural (N)" && data.fecha_nacimiento === "") {
+                  Swal.fire({
+                    title: "Advertencia",
+                    text: "La fecha de nacimiento es obligatoria.",
+                    icon: "question"
+                  });
+                  return;
+
+
+                }
+
+
+
+
+
+
+
+                if (data.tipo_persona === "") {
+                  Swal.fire({
+                    title: "Advertencia",
+                    text: "El campo Tipo de Persona es obligatorio.",
+                    icon: "question"
+                  });
+                  return;
+                }
+                if (data.via === "" && !ruralCheck.checked) {
+                  Swal.fire({
+                    title: "Advertencia",
+                    text: "El campo Via es obligatorio.",
+                    icon: "question"
+                  });
+                  return;
+                }
+                if (data.numero_via === "" && !ruralCheck.checked) {
+                  Swal.fire({
+                    title: "Advertencia",
+                    text: "El campo Número es obligatorio.",
+                    icon: "question"
+                  });
+                  return;
+                }
+
+                if ((data.numero_placa === "" || data.numero_placa3 === "") && !ruralCheck.checked) {
+                  Swal.fire({
+                    title: "Advertencia",
+                    text: "El campo Número de placa le falta información.",
+                    icon: "question"
+                  });
+                  return;
+                }
+
+
+
+                if (data.tipo_identificacion === "") {
+                  Swal.fire({
+                    title: "Advertencia",
+                    text: "El campo Tipo de identificación es obligatorio.",
+                    icon: "question"
+                  });
+                  return;
+                }
+                if (data.numero_identificacion === "") {
+                  Swal.fire({
+                    title: "Advertencia",
+                    text: "El campo Número de Identificación es obligatorio.",
+                    icon: "question"
+                  });
+                  return;
+                }
+                if (data.nombre === "") {
+                  Swal.fire({
+                    title: "Advertencia",
+                    text: "El campo Nombre es obligatorio.",
+                    icon: "question"
+                  });
+                  return;
+                }
+                if (data.apellidos === "") {
+                  Swal.fire({
+                    title: "Advertencia",
+                    text: "El campo Apellidos es obligatorio.",
+                    icon: "question"
+                  });
+                  return;
+                }
+
+
+
+                if (data.correo === "") {
+                  Swal.fire({
+                    title: "Advertencia",
+                    text: "El campo Correo Electrónico es obligatorio.",
+                    icon: "question"
+                  });
+                  return;
+                }
+                if (data.telefono === "") {
+                  Swal.fire({
+                    title: "Advertencia",
+                    text: "El campo Teléfono es obligatorio.",
+                    icon: "question"
+                  });
+                  return;
+                }
+                if (data.barrio === "") {
+                  Swal.fire({
+                    title: "Advertencia",
+                    text: "El campo Barrio es obligatorio.",
+                    icon: "question"
+                  });
+                  return;
+                }
+                if (data.municipio_residencia === "") {
+                  Swal.fire({
+                    title: "Advertencia",
+                    text: "El campo Municipio de residencia es obligatorio.",
+                    icon: "question"
+                  });
+                  return;
+                }
+
+                if (data.domicilio === "") {
+                  Swal.fire({
+                    title: "Advertencia",
+                    text: "El campo Domicilio para correspondencia es obligatorio.",
+                    icon: "question"
+                  });
+                  return;
+                }
+
+                // if (!complemento_rural_1.disabled && (complemento_rural_1.value === "" || complemento_rural_1.value === "null") && via.disabled) {
+                //   Swal.fire({
+                //     title: "Advertencia",
+                //     text: "El campo Domicilio para correspondencia es obligatorio.",
+                //     icon: "question"
+                //   });
+                //   return;
+                // }
+
+
+                // Insertar el registro en Zoho CRM
+                ZOHO.CRM.API.insertRecord({ Entity: "Contacts", APIData: recordData, Trigger: ["workflow"] }).then(function (response) {
+                  console.log("Respuesta de Zoho CRM:", response);
+                  Swal.fire({
+                    title: "Exito!",
+                    text: `El contacto ${data.nombre} ${data.apellidos}, fue creado con exito!.`,
+                    icon: "success"
+                  });
+                  document.getElementById('registroForm').reset();
+                }).catch(function (error) {
+                  const url = `https://crm.zoho.com/crm/org749371791/tab/Contacts/${error.data[0].details.id}/canvas/4865647000125348619`;
+
+                  if (error.data[0].code === "DUPLICATE_DATA" && error.data[0].details.api_name === "N_mero_de_identificaci_n") {
+                    Swal.fire({
+                      title: "¡Error!",
+                      html: `Ya existe un contacto con el número de identificación <strong>${data.numero_identificacion}</strong>, registro:
+           <a href="${url}" target="_blank" style="color: blue; text-decoration: underline;">Ver contacto</a>`,
+                      icon: "error"
+                    });
+                    console.error("Error al insertar registro:", error);
+                    return;
+                  }
+
+
+                  if (error.data[0].code === "DUPLICATE_DATA" && error.data[0].details.api_name === "Email") {
+                    Swal.fire({
+                      title: "¡Error!",
+                      html: `Ya existe un contacto con el Email  <strong>${data.correo}</strong>, registro:
+           <a href="${url}" target="_blank" style="color: blue; text-decoration: underline;">Ver contacto</a>`,
+                      icon: "error"
+                    });
+                    return;
+                  }
+
+                  if (error.data[0].code === "DUPLICATE_DATA" && error.data[0].details.api_name === "Mobile") {
+                    Swal.fire({
+                      title: "¡Error!",
+                      html: `El télefono del contacto a crear ya existe en el modulo de contactos, registro:
+           <a href="${url}" target="_blank" style="color: blue; text-decoration: underline;">Ver contacto</a>`,
+                      icon: "error"
+                    });
+                    return;
+                  }
+
+
+
+                });
+              });
+
+            } else {
+              console.log("No tienes permiso para realizar esta acción");
+              Swal.fire({
+                title: "Upss?",
+                text: "No tiene permiso para realizar esta acción.",
+                icon: "question"
+              })
+
+              document.querySelector("input[name='nombre']").setAttribute("disabled", true);
+              document.querySelector("input[name='apellidos']").setAttribute("disabled", true);
+              document.querySelector("select[name='municipio_expedicion']").setAttribute("disabled", true);
+              document.querySelector("select[name='tipo_identificacion']").setAttribute("disabled", true);
+              document.querySelector("input[name='numero_identificacion']").setAttribute("disabled", true);
+              document.querySelector("input[name='fecha_nacimiento']").setAttribute("disabled", true);
+              document.querySelector("input[name='movil']").setAttribute("disabled", true);
+              document.querySelector("input[name='barrio']").setAttribute("disabled", true);
+              document.querySelector("select[name='municipio_residencia']").setAttribute("disabled", true);
+              document.querySelector("select[name='clasificacion_tributaria']").setAttribute("disabled", true);
+              document.querySelector("select[name='tipo_contribuyente']").setAttribute("disabled", true);
+              document.querySelector("select[name='tipo_vivienda']").setAttribute("disabled", true);
+              document.querySelector("input[name='proyecto_hc']").setAttribute("disabled", true);
+              document.querySelector("input[name='hoja_negociacion']").setAttribute("disabled", true);
+              document.querySelector("select[name='tipo_persona']").setAttribute("disabled", true);
+              document.querySelector("select[name='estado_civil']").setAttribute("disabled", true);
+              document.querySelector("input[name='correo']").setAttribute("disabled", true);
+              document.querySelector("input[name='telefono']").setAttribute("disabled", true);
+              document.querySelector("input[name='domicilio']").setAttribute("disabled", true);
+              document.querySelector("button[type='submit']").setAttribute("disabled", true);
+
+
+
+            }
+          }
+          else {
+            console.warn("No se encontró información del usuario.");
+          }
+        })
+        .catch(function (error) {
+          console.error("Error al obtener el usuario actual:", error);
+        });
+
+    });
+
+
+
+    ZOHO.embeddedApp.init();
+  </script>
+</body>
+
+</html>
