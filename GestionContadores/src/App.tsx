@@ -8,6 +8,7 @@ interface modulRecord {
     Estado?: string;
     idFecha?: string;
     label?: string;
+    Agrupaci_n?: string;
     numeroMedidor?: string;
     criteriaField?: string;
     Comprador_principal?: { id: string, name: string };
@@ -71,6 +72,11 @@ export default function App() {
         }
     }, [filters]);
 
+    React.useEffect(() => console.log("THE REAL DATA: ", entregas), [entregas]);
+
+    const filterAgrupacion = (row: modulRecord) => {
+        return row.Agrupaci_n?.toLocaleLowerCase() === filters?.agrupacion?.Name?.toLocaleLowerCase();
+    };
 
     const fetchDataAll = () => {
         const { proyecto } = filters;
@@ -80,28 +86,33 @@ export default function App() {
             RelatedList: "Inmuebles",
             page: 1, per_page: 200
         }).then(function (data: responseGetRecords) {
-            const Entregas = data.data?.map(async inmueble => {
-                return await ZOHO.CRM.API.getRelatedRecords({
-                    Entity: "Products",
-                    RecordID: inmueble.id,
-                    RelatedList: "Entregas",
-                    page: 1, per_page: 200
-                }).then(function (data: responseGetRecords) {
-                    return data.data?.filter(value => ["Entregado", "Entregado con pendientes"].includes(value.Estado ?? ''));
+            const Entregas = data
+                .data?.filter(filterAgrupacion)
+                .map(async inmueble => {
+                    return await ZOHO.CRM.API.getRelatedRecords({
+                        Entity: "Products",
+                        RecordID: inmueble.id,
+                        RelatedList: "Entregas",
+                        page: 1, per_page: 200
+                    }).then(function (data: responseGetRecords) {
+                        return data.data?.filter(value => ["Entregado", "Entregado con pendientes"].includes(value.Estado ?? ''));
+                    });
                 });
-            });
             if (!Entregas) return;
             Promise.all(Entregas).then((results: modulRecord[]) => {
-                setEntregas(results.flat().filter(a => !!a).filter(masterFilter));
+                console.log("THE REAL RESULTS: ", results.flat());
+                setEntregas(results.flat().filter(masterFilter));
             });
         });
     };
 
-
     const masterFilter = (row: modulRecord) => {
-        if (!filters.tipoContador.criteriaField) return true;
-        const validateEstaus = ['Aplica y no entregado'].includes(`${row[filters.tipoContador.criteriaField] ?? 'Sin valor'}`);
+        const { criteriaField } = filters.tipoContador;
+        if (!criteriaField) return true;
+        if (!row.id) return false;
+        const validateEstaus = ['Aplica y no entregado'].includes(`${row[criteriaField] ?? 'Sin valor'}`);
         const validateEmpty = !row[filters.tipoContador.idFecha ?? ''];
+        console.log('paver :', validateEstaus, validateEmpty);
         return validateEstaus && validateEmpty;
     }
 
@@ -310,7 +321,6 @@ const TablaMedidores = ({ data, rowsSelected }: { data: modulRecord[], rowsSelec
                         <th>INMUEBLE</th>
                         <th>COMPRADOR PRINCIPAL</th>
                         <th>NÚMERO DE MEDIDOR</th>
-                        <th>LECTURA DE MEDIDOR{!!filter?.tipoContador ? (" DE " + filter?.tipoContador.label) : ''}</th>
                         <th>
                             <label className="checkbox-label">
                                 <input
@@ -351,31 +361,19 @@ const Row = ({ row, selected, setSelectedRows }:
     const setDataRowA = () => {
         setDataRow({
             id: row.id,
-            [idfilter ?? 'sin_data']: row[idfilter ?? ""] ?? '',
             [numeroMedidor ?? 'sin_data']: row[numeroMedidor ?? ""] ?? ''
         } as modulRecord)
     };
 
     React.useEffect(setDataRowA, [row]);
 
-    // React.useEffect(() => {
-    //     if (!idfilter || !numeroMedidor) return;
-    //     setSelectedRows(prevSelected => {
-    //         const exists = prevSelected.find(r => r.id === dataRow.id);
-    //         const updated = prevSelected.map(r => r.id === dataRow.id ? { ...r, ...dataRow } : r);
-    //         if (!exists) updated.push(dataRow);
-    //         return updated.filter(r => !!r[idfilter] && !!r[numeroMedidor]);
-    //     });
-    // }, [dataRow]);
-
-    const manageChange = (e: object) => {
+    const manageChange = (e: Partial<modulRecord>) => {
         setDataRow(a => {
             const dataUpdate = { ...a, ...e };
-            handleSelectRow(!!e[idfilter ?? numeroMedidor ?? 'pailas'], dataUpdate);
+            handleSelectRow(idfilter ? !!e[idfilter as keyof modulRecord] : false, dataUpdate); //!!e[idfilter ?? numeroMedidor ?? 'pailas']
             return dataUpdate;
         });
     };
-
 
     const newDate = () => {
         const hoy = new Date();
@@ -386,13 +384,12 @@ const Row = ({ row, selected, setSelectedRows }:
     };
 
     const handleSelectRow = (checked: boolean, dataAux?: modulRecord) => {
-        if (!idfilter || !numeroMedidor) return;
+        if (!numeroMedidor) return;
         if (!dataAux) dataAux = dataRow;
 
-        if (!dataAux[idfilter] || !dataAux[numeroMedidor]) return;
+        if (!dataAux[numeroMedidor]) return;
         const DATA: modulRecord = {
             id: dataAux.id,
-            [idfilter ?? 'sin_data']: `${dataAux[idfilter ?? ""] ?? ''}`,
             [numeroMedidor ?? 'sin_data']: `${dataAux[numeroMedidor ?? ""] ?? ''}`,
             [idFecha ?? 'sin_data']: newDate()
         };
@@ -415,12 +412,6 @@ const Row = ({ row, selected, setSelectedRows }:
             <Input id={numeroMedidor + 's'}
                 value={`${dataRow[numeroMedidor ?? ''] ?? ''}`}
                 onChange={e => manageChange({ [numeroMedidor ?? 'sin_data']: `${e}` })}
-            />
-        </td>
-        <td>
-            <Input id={idfilter + 's'}
-                value={`${dataRow[idfilter ?? ''] ?? ''}`}
-                onChange={e => manageChange({ [idfilter ?? 'sin_data']: `${e}`, [idFecha ?? 'sin_data']: newDate() })}
             />
         </td>
         <td>
